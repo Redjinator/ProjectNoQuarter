@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [Header("Weapon Settings")]
+    [Header("Weapon Stats")]
+    
     public GameObject prefab;
     public float damage;
     public float speed;
@@ -11,12 +12,6 @@ public class WeaponController : MonoBehaviour
     public int pierce;
 
     protected PlayerMovement pm;
-
-
-
-
-
-
 
 
     protected virtual void Start()

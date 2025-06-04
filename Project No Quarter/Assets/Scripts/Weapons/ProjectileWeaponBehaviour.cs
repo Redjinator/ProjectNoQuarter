@@ -22,5 +22,15 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
 
         Vector3 scale = transform.localScale;
         Vector3 rotation = transform.rotation.eulerAngles;
+
+        if (dirx < 0 && diry == 0)
+        {
+            scale.x = scale.x * -4; // Flip the sprite horizontally
+            scale.y = scale.y * -4; // Flip the sprite vertically
+        }
+
+        transform.localScale = scale;
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(diry, dirx) * Mathf.Rad2Deg - 45f); // Rotate the sprite to face the direction of movement
     }
+
 }
