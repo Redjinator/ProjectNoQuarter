@@ -13,9 +13,14 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
         Destroy(gameObject, destroyAfterSeconds);
     }
 
-    
+
     public void DirectionChecker(Vector3 dir)
     {
         direction = dir;
+        float dirx = direction.x;
+        float diry = direction.y;
+
+        Vector3 scale = transform.localScale;
+        Vector3 rotation = transform.rotation.eulerAngles;
     }
 }

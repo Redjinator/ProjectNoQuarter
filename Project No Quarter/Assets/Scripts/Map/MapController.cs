@@ -34,51 +34,44 @@ public class MapController : MonoBehaviour
 
     void ChunkChecker()
     {
-        if (currentChunk == null) return;
+        if (!currentChunk) return;
 
-        Vector2 dir = pm.moveDir;
-        // “pure right”: x > deadzone, y is near zero
-        if (dir.x > deadzone && Mathf.Abs(dir.y) < deadzone)
+        Vector2[] directions = new Vector2[]
         {
-            CheckAndSpawn("Right");
-        }
-        // “pure left”: x < -deadzone, y near zero
-        else if (dir.x < -deadzone && Mathf.Abs(dir.y) < deadzone)
+            Vector2.right, Vector2.left,
+            Vector2.up, Vector2.down,
+            Vector2.right + Vector2.up,
+            Vector2.right + Vector2.down,
+            Vector2.left + Vector2.up,
+            Vector2.left + Vector2.down
+        };
+
+        foreach (var dir in directions)
         {
-            CheckAndSpawn("Left");
+            string dirName = DirectionToName(dir);
+            Transform edge = currentChunk.transform.Find(dirName);
+            if (edge && !Physics2D.OverlapCircle(edge.position, checkerRadius, terrainMask))
+            {
+                noTerrainPosition = edge.position;
+                SpawnChunk();
+            }
         }
-        // “pure up”: y > deadzone, x near zero
-        else if (dir.y > deadzone && Mathf.Abs(dir.x) < deadzone)
-        {
-            CheckAndSpawn("Up");
-        }
-        // “pure down”: y < -deadzone, x near zero
-        else if (dir.y < -deadzone && Mathf.Abs(dir.x) < deadzone)
-        {
-            CheckAndSpawn("Down");
-        }
-        // diagonal: x > deadzone && y > deadzone
-        else if (dir.x > deadzone && dir.y > deadzone)
-        {
-            CheckAndSpawn("Right Up");
-        }
-        // diagonal: x < -deadzone && y > deadzone
-        else if (dir.x < -deadzone && dir.y > deadzone)
-        {
-            CheckAndSpawn("Left Up");
-        }
-        // diagonal: x < -deadzone && y < -deadzone
-        else if (dir.x < -deadzone && dir.y < -deadzone)
-        {
-            CheckAndSpawn("Left Down");
-        }
-        // diagonal: x > deadzone && y < -deadzone
-        else if (dir.x > deadzone && dir.y < -deadzone)
-        {
-            CheckAndSpawn("Right Down");
-        }
-        // if no direction is detected, do nothing
     }
+
+    string DirectionToName(Vector2 dir)
+    {
+        if (dir == Vector2.right) return "Right";
+        if (dir == Vector2.left) return "Left";
+        if (dir == Vector2.up) return "Up";
+        if (dir == Vector2.down) return "Down";
+        if (dir == Vector2.right + Vector2.up) return "Right Up";
+        if (dir == Vector2.right + Vector2.down) return "Right Down";
+        if (dir == Vector2.left + Vector2.up) return "Left Up";
+        if (dir == Vector2.left + Vector2.down) return "Left Down";
+        return "";
+    }
+
+
 
     void CheckAndSpawn(string childName)
     {
